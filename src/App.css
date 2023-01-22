@@ -7,12 +7,6 @@
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -28,11 +22,27 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.questionBox {
+  display: flex;
+  box-sizing: border-box;
+  width: 40%;
+  border: 5px solid rgb(25, 46, 91);
+  padding: 5px;
+  margin: 5px;
+}
+
+.options-container {
+  display: flex;
+  border: 5px solid black;
+  padding: 5px;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+button {
+  width: 100%;
+  min-height: 50px;
+  background-color: rgb(194, 31, 31);
+  color:aliceblue;
+  font-size: large;
 }
