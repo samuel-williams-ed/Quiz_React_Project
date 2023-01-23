@@ -21,6 +21,26 @@
 .App-link {
   color: #61dafb;
 }
+.title-bar {
+  display: flex;
+  justify-content: stretch;
+}
+.title-bar * {
+  display: flex;
+  flex-wrap: wrap;
+  /* background-color: orange; */
+  flex-grow: 1;
+}
+.score-container {
+  display: flex;
+  justify-self: flex-end;
+  align-items: center;
+  justify-content: center;
+}
+.score-container * {
+  width: 51%;
+  justify-content: center;
+}
 
 .questionBox {
   display: flex;
@@ -45,4 +65,17 @@ button {
   background-color: rgb(194, 31, 31);
   color:aliceblue;
   font-size: large;
+}
+.cover {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.368);
+}
+
+.red-border {
+  border: 5px solid red;
+}
+
+.bold {
+  font-weight: bold;
 }

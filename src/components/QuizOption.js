@@ -1,10 +1,11 @@
 
 
-const QuizOption = ({qNumber, quote}) => {
+const QuizOption = ({qLetter, quote, updatechoice, gameState}) => {
     return (
-        <div className="questionBox">
-            <h3>{qNumber}: {quote}</h3>
-        </div>
+        <>
+        { gameState==='setup' && <button onClick={updatechoice} value={qLetter} className="questionBox">{qLetter}:</button>}
+        { gameState==='playing' && <button onClick={updatechoice} value={qLetter} className="questionBox">{qLetter}: {quote}</button>}
+        </>
     )
 }
 
