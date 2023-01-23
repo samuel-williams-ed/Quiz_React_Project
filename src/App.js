@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import QuizCard from './containers/QuizCard';
-import reduceString from './reduceString'
+import reduceString from './helpers/reduceString'
+import Log from './helpers/Log'
 
 function App() {
 
@@ -11,37 +12,31 @@ const [answerIndex, setAnswerIndex] = useState(0) //should never be > 3
 const [guessIndex, setGuessIndex] = useState(null) //should never be > 3
 const [score, setScore] = useState(0)
 
-const [optionOne, setOptionOne] = useState(["Answer A"])
-const [optionTwo, setOptionTwo] = useState(["Answer B"])
-const [optionThree, setOptionThree] = useState(["Answer C"])
+const [quoteOne, setQuoteOne] = useState(["Answer A"])
+const [quoteTwo, setQuoteTwo] = useState(["Answer B"])
+const [quoteThree, setQuoteThree] = useState(["Answer C"])
 const [kanyeQuote, setKanyeQuote] = useState("Answer D")
-const [options, setOptions] = useState([])
+const [listOfOptions, setOptions] = useState([])
 
 // settings:
 const mapAnswerToIndex = {"A":0, "B":1, "C":2, "D":3}
 const quoteLength = 145
 
 // manage React executions
-useEffect( () => {
-  // progressTheGame()
-  // setOptions()
-},[])
-
-// useEffect(() => {
-//   buildOptionsArray()
-// }, [answerIndex])
-
 useEffect(() => {
   buildOptionsArray()
-}, [answerIndex, optionOne, optionTwo, optionThree, kanyeQuote])
+}, [answerIndex, quoteOne, quoteTwo, quoteThree, kanyeQuote])
 
 // fetch quotes from API
 const getKanyeChat = () => {
   fetch('https://api.kanye.rest/')
   .then( res => res.json())
   .then( quote => { 
-    console.log("We have retrieved Kanye's wisdom")
-    console.log(quote.quote)
+
+    // debug
+    // console.log("We have retrieved Kanye's wisdom")
+    // console.log(quote.quote)
+
     const option = reduceString(String(quote.quote), quoteLength)
     setKanyeQuote(option)
   })
@@ -54,7 +49,7 @@ const getQuoteOne = () => {
   .then(quote => {
     // const option = reduceString(String(quote.quote), quoteLength)
     const option = reduceString(String(quote), quoteLength)
-    setOptionOne(option)
+    setQuoteOne(option)
     console.log(`set Option 1 to: ${option}`)
     })
   }
@@ -63,7 +58,7 @@ const getQuoteTwo = () => {
   .then(res => res.json())
   .then(quote => {
     const option = reduceString(String(quote.quote), quoteLength)
-    setOptionTwo(option)
+    setQuoteTwo(option)
       console.log(`set Option 2 to: ${option}`)
     })
   }
@@ -72,7 +67,7 @@ const getQuoteThree = () => {
     .then(res => res.json())
     .then(quote => {
       const option = reduceString(String(quote), quoteLength)
-      setOptionThree(option)
+      setQuoteThree(option)
         console.log(`set Option 3 to: ${option}`)
       })
   }
@@ -80,37 +75,36 @@ const getQuoteThree = () => {
     // loading functions
   const generateAnswerIndex = () => {
     let answer = Math.floor(Math.random() * 4);
-    console.log(`Generated new correct answer to be ${answer}`)
     setAnswerIndex(answer) //should never be > 3
-    
+    Log('Generated new correct answer to be', answer)
   }
-  
   const buildOptionsArray = () => {
     console.log(`~~~ Building options array...`)
-    let result = [optionOne, optionTwo, optionThree]
+    let result = [quoteOne, quoteTwo, quoteThree]
     result.splice(answerIndex, 0, kanyeQuote)
-    console.log(`answerIndex = :${answerIndex}`)
-    console.log(`inserting Kanye quote to position ${answerIndex}`)
-    console.log(result)
+    // console.log(`answerIndex = :${answerIndex}`)
+    // console.log(`inserting Kanye quote to position ${answerIndex}`)
+    // console.log(result)
     setOptions(result)
   }
 
-  // initialise data; make API calls
-const loadGame = () => {
-  console.log("Loading Game...")
-
-  generateAnswerIndex()
-  console.log(`answerIndex set to: ${answerIndex}`)
-
+const getQuotes = () => {
   getQuoteOne()
   getQuoteTwo()
   getQuoteThree()
   getKanyeChat()
+}
+
+  // initialise data; make API calls
+const loadGame = () => {
+  console.log("Loading Game...")
+  generateAnswerIndex()
+  getQuotes()
   buildOptionsArray()
 }
 
 const progressTheGame = (evt) => {
-  console.log("Progressing the game")
+  Log("Progressing the game")
 
   if (evt && gameState==='setup') {
     setGameState('playing')
@@ -166,7 +160,7 @@ const renderButton = () => {
           <p>{score}</p>
         </div>
     </div>
-    <QuizCard currentOptions={options} updatechoice={updatechoice} gameState={gameState}/>
+    <QuizCard currentOptions={listOfOptions} updatechoice={updatechoice} gameState={gameState}/>
     {renderButton()}
     </div>
   );
