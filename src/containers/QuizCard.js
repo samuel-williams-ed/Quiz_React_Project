@@ -4,7 +4,7 @@ import QuizQuestion from "../components/QuizQuestion"
 const QuizCard = ({currentOptions, updatechoice, gameState}) => {
     
     const buildQuizOption = () => {
-        if (gameState==='setup' || gameState===null) {return}
+        // if (gameState==='setup' || gameState===null) {return}
         if (gameState==='victory') {
             return (
                 <>

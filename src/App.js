@@ -149,14 +149,14 @@ const renderButton = () => {
     return (<button onClick={(evt) => progressTheGame(evt)} className="bold cover">Start</button>)
   }
   else if (gameState==='playing') {
-    return (<button onClick={(evt) => progressTheGame(evt)} className="bold">Choose</button>)
+    return (<button onClick={(evt) => progressTheGame(evt)} className="choose bold">Choose</button>)
   }
   else if (gameState==='victory' || gameState==='defeat'){
-    return (<button onClick={(evt) => progressTheGame(evt)} className="bold">Try Again</button>)
+    return (<button onClick={(evt) => progressTheGame(evt)} className="choose bold">Go Again</button>)
   }
 }
   return (
-    <>
+    <div className='container'>
     <div className='title-bar'>
       <h1> Kanye guess which it is yet?</h1>
       <div className="score-container">
@@ -166,7 +166,7 @@ const renderButton = () => {
     </div>
     <QuizCard currentOptions={options} updatechoice={updatechoice} gameState={gameState}/>
     {renderButton()}
-    </>
+    </div>
   );
 }
 

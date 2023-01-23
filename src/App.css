@@ -60,20 +60,42 @@
 }
 
 button {
-  width: 100%;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
   min-height: 50px;
   background-color: rgb(194, 31, 31);
   color:aliceblue;
   font-size: large;
+  border-radius: 5px;
+  margin: 6px;
+
+}
+.choose {
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 16px;
 }
 .cover {
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.368);
+  background-color: rgba(0, 0, 0, 0.631);
+  display: block;
+  position: absolute;
+  left: 0px;
+  top: 0px;
 }
 
 .red-border {
-  border: 5px solid red;
+  border: 5px solid rgb(189, 16, 16);
+  background-color: rgb(145, 28, 28);;
 }
 
 .bold {
