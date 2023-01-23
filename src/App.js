@@ -19,7 +19,7 @@ const [options, setOptions] = useState([])
 
 // settings:
 const mapAnswerToIndex = {"A":0, "B":1, "C":2, "D":3}
-const quoteLength = 97
+const quoteLength = 145
 
 // manage React executions
 useEffect( () => {
@@ -48,10 +48,12 @@ const getKanyeChat = () => {
   .catch("We have a problem accessing Kanye")
   }
 const getQuoteOne = () => {
-  fetch('https://api.goprogram.ai/inspiration')
+  // fetch('https://api.goprogram.ai/inspiration')
+  fetch('http://ron-swanson-quotes.herokuapp.com/v2/quotes')
   .then(res => res.json())
   .then(quote => {
-    const option = reduceString(String(quote.quote), quoteLength)
+    // const option = reduceString(String(quote.quote), quoteLength)
+    const option = reduceString(String(quote), quoteLength)
     setOptionOne(option)
     console.log(`set Option 1 to: ${option}`)
     })
