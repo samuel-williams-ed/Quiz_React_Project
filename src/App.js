@@ -7,7 +7,7 @@ import Log from './helpers/Log'
 function App() {
 
 // useStates
-const [gameState, setGameState] = useState(null) //setup, playing, victory, defeat
+const [gameState, setGameState] = useState('setup') //setup, playing, victory, defeat
 const [answerIndex, setAnswerIndex] = useState(0) //should never be > 3
 const [guessIndex, setGuessIndex] = useState(null) //should never be > 3
 const [score, setScore] = useState(0)
@@ -30,6 +30,10 @@ const quoteLength = 145
     getQuoteTwo()
     getQuoteThree()
   }, [])
+
+  useEffect(() => {
+    Log("--- useEffect loggin gameState", gameState)
+  }, [gameState])
 
   // fetch API's
 function getKanyeChat () {
@@ -99,37 +103,35 @@ function getQuoteThree() {
   }
 
   // initialise data; make API calls
-const loadGame = (reference) => {
-  console.log(`~~~ Loading Game... no.${reference}`)
+const loadGame = (referenceNo) => {
+  console.log(`~~~ Loading Game... no.${referenceNo}`)
   generateAnswerIndex()
-
   console.log("~~~ Getting Quotes...")
   Promise.all([getQuoteOne(), getQuoteTwo(), getQuoteThree(), getKanyeChat()])
     .then(() => buildListOfQuotes())
     .then((localListOfQuotes) => {
-      console.log(`   |   GamesState === playing (loadGame)   |   `)
       Log("options = ", localListOfQuotes)
     })
-    .then(setGameState('playing')) 
+    .then(() => {
+      setGameState('playing')
+      console.log(`   |   GamesState === playing (loadGame)   |   ${gameState}`)
+    }) 
 }
 
+// ### set gameState ### //
 const progressTheGame = (evt) => {
   Log("~~~ Progressing the game")
-
   if (evt && gameState==='setup') {
-    console.log(`   |   GamesState === setup   |   `)
+    console.log(`   |   GamesState === setup   |  ${gameState}`)
     setGameState('loading')
     loadGame(2)
     return
-
   } else if (gameState==='loading') {
-    console.log(`   |   GamesState === loading   |   `)
+    console.log(`   |   GamesState === loading   |   ${gameState}`)
     //loadGame will progress gameState after fetch from API's
     return
-
   } else if (gameState==='playing'){
-    console.log(`   |   GamesState === playing   |   `)
-
+    console.log(`   |   GamesState === playing   |   ${gameState}`)
     if (guessIndex === answerIndex){
       console.log("Correct!")
       setGameState('victory')
@@ -138,27 +140,25 @@ const progressTheGame = (evt) => {
       console.log("wrong choice")
       setGameState('defeat')
     }
-
   } else if (gameState==='victory' || gameState==='defeat') {
-    console.log(`   |   GamesState === victory/defeat   |   `)
+    console.log(`   |   GamesState === victory/defeat   |   ${gameState}`)
     loadGame(99)
-    setGameState('playing')
+    setGameState('setup')
   }
 }
 
-// initiate game
-if (gameState===null){
-  console.log(`   |   GamesState === null   |   `)
-  console.log("Performing initial setup")
-  setGameState('setup')
+// // initiate game
+// if (gameState===null){
+//   console.log(`   |   GamesState === null   |   `)
+//   console.log("Performing initial setup")
+//   setGameState('setup')
 
-}
+// }
 
 // change guess on answer selection
 const updatechoice = (event) => {
   if (gameState==='playing'){
     event.target.classList.toggle('red-border')
-
     const chosenLetter = event.target.value
     console.log(`User has chosen ${chosenLetter}`)
     setGuessIndex(mapAnswerToIndex[chosenLetter])
@@ -166,8 +166,11 @@ const updatechoice = (event) => {
 }
 
 const renderButton = () => {
-  if (gameState==='setup'|| gameState==='loading' || gameState===null) {
+  if (gameState==='setup'|| gameState===null) {
     return (<button onClick={(evt) => progressTheGame(evt)} className="bold cover">Start</button>)
+  }
+  else if (gameState==='loading') {
+    return (<button className="bold cover">Loading</button>) 
   }
   else if (gameState==='playing') {
     return (<button onClick={(evt) => progressTheGame(evt)} className="choose bold">Choose</button>)
