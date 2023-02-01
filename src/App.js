@@ -104,8 +104,10 @@ function getQuoteThree() {
 
   // initialise data; make API calls
 const loadGame = (referenceNo) => {
+
   console.log(`~~~ Loading Game... no.${referenceNo}`)
   generateAnswerIndex()
+
   console.log("~~~ Getting Quotes...")
   Promise.all([getQuoteOne(), getQuoteTwo(), getQuoteThree(), getKanyeChat()])
     .then(() => buildListOfQuotes())
@@ -143,7 +145,7 @@ const progressTheGame = (evt) => {
   } else if (gameState==='victory' || gameState==='defeat') {
     console.log(`   |   GamesState === victory/defeat   |   ${gameState}`)
     loadGame(99)
-    setGameState('setup')
+    setGameState('loading')
   }
 }
 
