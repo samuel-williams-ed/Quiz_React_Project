@@ -31,9 +31,9 @@ const quoteLength = 145
     getQuoteThree()
   }, [])
 
-  useEffect(() => {
-    Log("--- useEffect loggin gameState", gameState)
-  }, [gameState])
+  // useEffect(() => {
+  //   Log("--- useEffect loggin gameState", gameState)
+  // }, [gameState])
 
   // fetch API's
 function getKanyeChat () {
@@ -48,6 +48,7 @@ function getKanyeChat () {
 
     const option = reduceString(String(quote.quote), quoteLength)
     setKanyeQuote(option)
+    console.log(`Kanye says "${option}"`)
     return option
   })
   .then(option => option)
@@ -66,7 +67,7 @@ function getQuoteOne () {
       Log("extra line to return option after setting quote one")
       return option})
       .catch((err) => {
-        console.log(`problem getting quote: ${err}`)
+        console.log(`problem getting quoteOne: ${err}`)
       })
   }
 function getQuoteTwo() {
@@ -78,7 +79,7 @@ function getQuoteTwo() {
     console.log(`set Option 2 to: ${option}`)
     })
     .catch((err) => {
-      console.log(`problem getting quote: ${err}`)
+      console.log(`problem getting quoteTwo: ${err}`)
     })
   }
 function getQuoteThree() {
@@ -91,7 +92,7 @@ function getQuoteThree() {
       return option
       })
       .catch((err) => {
-        console.log(`problem getting quote: ${err}`)
+        console.log(`problem getting quoteThree: ${err}`)
       })
   }
 
