@@ -65,6 +65,9 @@ function getQuoteOne () {
     .then(option => {
       Log("extra line to return option after setting quote one")
       return option})
+      .catch((err) => {
+        console.log(`problem getting quote: ${err}`)
+      })
   }
 function getQuoteTwo() {
   return fetch('https://api.themotivate365.com/stoic-quote')
@@ -73,6 +76,9 @@ function getQuoteTwo() {
     const option = reduceString(String(quote.quote), quoteLength)
     setQuoteTwo(option)
     console.log(`set Option 2 to: ${option}`)
+    })
+    .catch((err) => {
+      console.log(`problem getting quote: ${err}`)
     })
   }
 function getQuoteThree() {
@@ -83,6 +89,9 @@ function getQuoteThree() {
       setQuoteThree(option)
       console.log(`set Option 3 to: ${option}`)
       return option
+      })
+      .catch((err) => {
+        console.log(`problem getting quote: ${err}`)
       })
   }
 
