@@ -31,11 +31,10 @@ const quoteLength = 145
     getQuoteThree()
   }, [])
 
-  // useEffect(() => {
-  //   Log("--- useEffect loggin gameState", gameState)
-  // }, [gameState])
+  // ############################# //
+  // ####### fetch API's ######### //
+  // ############################# //
 
-  // fetch API's
 function getKanyeChat () {
   return fetch('https://api.kanye.rest/')
   .then( res => res.json())
@@ -60,11 +59,10 @@ function getQuoteOne () {
   .then(quote => {
     const option = reduceString(String(quote), quoteLength)
     setQuoteOne(option)
-    console.log(`set Option 1 to: ${option}`)
+    // console.log(`set Option 1 to: ${option}`)
     return option
     })
     .then(option => {
-      Log("extra line to return option after setting quote one")
       return option})
       .catch((err) => {
         console.log(`problem getting quoteOne: ${err}`)
@@ -76,7 +74,7 @@ function getQuoteTwo() {
   .then(quote => {
     const option = reduceString(String(quote.quote), quoteLength)
     setQuoteTwo(option)
-    console.log(`set Option 2 to: ${option}`)
+    // console.log(`set Option 2 to: ${option}`)
     })
     .catch((err) => {
       console.log(`problem getting quoteTwo: ${err}`)
@@ -88,7 +86,7 @@ function getQuoteThree() {
     .then(quote => {
       const option = reduceString(String(quote), quoteLength)
       setQuoteThree(option)
-      console.log(`set Option 3 to: ${option}`)
+      // console.log(`set Option 3 to: ${option}`)
       return option
       })
       .catch((err) => {
@@ -96,50 +94,56 @@ function getQuoteThree() {
       })
   }
 
-    // loading functions
+  // ############################# //
+  // ####### loading game ######## //
+  // ############################# //
+
   const generateAnswerIndex = () => {
-    // console.log(`generate random no: ${Math.random()}`)
     let ranNo = Math.floor(Math.random() * 4);
+    console.log(`~~~ Generated new correct answer to be ${ranNo}`)
     setAnswerIndex(ranNo) //should never be > 3
-    Log('~~~ Generated new correct answer to be', ranNo)
+    return ranNo
   }
-  async function buildListOfQuotes() {
-    console.log(`~~~ Building listOfQuotes array...`)
+
+  async function buildListOfQuotes(inputAnswerIndex) {
+    console.log(`Answer at ${inputAnswerIndex}`)
+    console.log(`Kanye said "${kanyeQuote}"`)
     let result = [quoteOne, quoteTwo, quoteThree]
-    result.splice(answerIndex, 0, kanyeQuote)
+    result.splice(inputAnswerIndex, 0, kanyeQuote)
     setListOfQuotes(result)
-    Log("built list", result)
+    Log("Quotes", result)
     return result
   }
 
-  // initialise data; make API calls
+  // make new set of answers: get new random correct answer; get API data
 const loadGame = (referenceNo) => {
+  let localAnswerIndex = generateAnswerIndex()
 
-  console.log(`~~~ Loading Game... no.${referenceNo}`)
-  generateAnswerIndex()
-
-  console.log("~~~ Getting Quotes...")
   Promise.all([getQuoteOne(), getQuoteTwo(), getQuoteThree(), getKanyeChat()])
-
-    .then(() => buildListOfQuotes())
     .then(() => {
-      setGameState('playing')
-      console.log(`   |   GamesState === playing (loadGame)   |   ${gameState}`)
-    }) 
+      console.log("all promises received")
+      buildListOfQuotes(localAnswerIndex)})
+    .then(() => {setGameState('playing')}) 
 }
 
-// ### set gameState ### //
+// ############################# //
+// ##### set gameState ######### //
+// ############################# //
+
 const progressTheGame = (evt) => {
   Log("~~~ Progressing the game")
+
   if (evt && gameState==='setup') {
     console.log(`   |   GamesState === setup   |  ${gameState}`)
     setGameState('loading')
     loadGame(2)
     return
+
   } else if (gameState==='loading') {
     console.log(`   |   GamesState === loading   |   ${gameState}`)
     //loadGame will progress gameState after fetch from API's
     return
+
   } else if (gameState==='playing'){
     console.log(`   |   GamesState === playing   |   ${gameState}`)
     if (guessIndex === answerIndex){
@@ -150,6 +154,7 @@ const progressTheGame = (evt) => {
       console.log("wrong choice")
       setGameState('defeat')
     }
+
   } else if (gameState==='victory' || gameState==='defeat') {
     console.log(`   |   GamesState === victory/defeat   |   ${gameState}`)
     loadGame(99)

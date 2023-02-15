@@ -70,7 +70,10 @@ button {
   font-size: large;
   border-radius: 5px;
   margin: 6px;
+}
 
+button:hover {
+  border-color: skyblue;
 }
 .choose {
   display: flex;
