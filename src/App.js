@@ -110,10 +110,8 @@ const loadGame = (referenceNo) => {
 
   console.log("~~~ Getting Quotes...")
   Promise.all([getQuoteOne(), getQuoteTwo(), getQuoteThree(), getKanyeChat()])
+
     .then(() => buildListOfQuotes())
-    .then((localListOfQuotes) => {
-      Log("options = ", localListOfQuotes)
-    })
     .then(() => {
       setGameState('playing')
       console.log(`   |   GamesState === playing (loadGame)   |   ${gameState}`)
@@ -149,15 +147,7 @@ const progressTheGame = (evt) => {
   }
 }
 
-// // initiate game
-// if (gameState===null){
-//   console.log(`   |   GamesState === null   |   `)
-//   console.log("Performing initial setup")
-//   setGameState('setup')
-
-// }
-
-// change guess on answer selection
+// change guessIndex when user selects a new answer
 const updatechoice = (event) => {
   if (gameState==='playing'){
     event.target.classList.toggle('red-border')
