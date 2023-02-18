@@ -1,3 +1,14 @@
+# Kanye Quiz
+
+See if you cam guess which quote comes from Kayne West?!
+
+This project uses the React framework to build a simple quiz site. 
+
+It uses multiple publically available API's to generate a random of choice of quotes each game!
+
+Hope you enjoy!
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
