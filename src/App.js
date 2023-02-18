@@ -193,7 +193,7 @@ const renderButton = () => {
     <div className='title-bar'>
       <h1> Kanye guess which it is yet?</h1>
       <div className="score-container">
-          <p>Score:</p>
+          <h3>Score:</h3>
           <p>{score}</p>
         </div>
     </div>

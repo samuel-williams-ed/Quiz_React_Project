@@ -18,6 +18,11 @@
   color: white;
 }
 
+h1 {
+  justify-content: center;
+  align-items: center;
+}
+
 .App-link {
   color: #61dafb;
 }
@@ -36,6 +41,7 @@
   justify-self: flex-end;
   align-items: center;
   justify-content: center;
+  border: 5px solid black;
 }
 .score-container * {
   width: 51%;
