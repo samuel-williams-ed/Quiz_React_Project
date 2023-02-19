@@ -19,17 +19,23 @@ const [kanyeQuote, setKanyeQuote] = useState("Answer D")
 const [listOfQuotes, setListOfQuotes] = useState([])
 
 // settings:
-const mapAnswerToIndex = {"A":0, "B":1, "C":2, "D":3}
+const matchLetterToIndex = {"A":0, "B":1, "C":2, "D":3}
 const quoteLength = 145
 
-// manage React executions
+  // Fires when 'gameState' changed
   useEffect(() => {
-    console.log("UseEffect is firing...")
-    getKanyeChat()
-    getQuoteOne()
-    getQuoteTwo()
-    getQuoteThree()
-  }, [])
+    if (gameState == "loading") {
+      let localAnswerIndex = generateAnswerIndex() //also saves into useState 'answerIndex'
+      getKanyeChat()
+        .then((localKanyeQuote) => {
+          Promise.all([getQuoteOne(), getQuoteTwo(), getQuoteThree()])
+            .then((quotes) => {
+              setAnswerOptions(localAnswerIndex, quotes, localKanyeQuote)
+            })
+            .then(() => {setGameState('playing')}) 
+        })
+    }
+  }, [gameState])
 
   // ############################# //
   // ####### fetch API's ######### //
@@ -59,7 +65,7 @@ function getQuoteOne () {
   .then(quote => {
     const option = reduceString(String(quote), quoteLength)
     setQuoteOne(option)
-    // console.log(`set Option 1 to: ${option}`)
+    console.log(`set Option 1 to: ${option}`)
     return option
     })
     .then(option => {
@@ -74,7 +80,8 @@ function getQuoteTwo() {
   .then(quote => {
     const option = reduceString(String(quote.quote), quoteLength)
     setQuoteTwo(option)
-    // console.log(`set Option 2 to: ${option}`)
+    console.log(`set Option 2 to: ${option}`)
+    return option
     })
     .catch((err) => {
       console.log(`problem getting quoteTwo: ${err}`)
@@ -86,7 +93,7 @@ function getQuoteThree() {
     .then(quote => {
       const option = reduceString(String(quote), quoteLength)
       setQuoteThree(option)
-      // console.log(`set Option 3 to: ${option}`)
+      console.log(`set Option 3 to: ${option}`)
       return option
       })
       .catch((err) => {
@@ -100,64 +107,31 @@ function getQuoteThree() {
 
   const generateAnswerIndex = () => {
     let ranNo = Math.floor(Math.random() * 4);
-    console.log(`~~~ Generated new correct answer to be ${ranNo}`)
     setAnswerIndex(ranNo) //should never be > 3
+    console.log(`~~~ Generated new correct answer to be ${ranNo}`)
     return ranNo
   }
-
-  async function buildListOfQuotes(inputAnswerIndex) {
-    console.log(`Answer at ${inputAnswerIndex}`)
-    console.log(`Kanye said "${kanyeQuote}"`)
-    let result = [quoteOne, quoteTwo, quoteThree]
-    result.splice(inputAnswerIndex, 0, kanyeQuote)
-    setListOfQuotes(result)
-    Log("Quotes", result)
-    return result
+function setAnswerOptions(localAnswerIndex, localListOfQuotes, localKanyeQuote) {
+    localListOfQuotes.splice(localAnswerIndex, 0, localKanyeQuote)
+    setListOfQuotes(localListOfQuotes)
   }
 
-  // make new set of answers: get new random correct answer; get API data
-const loadGame = (referenceNo) => {
-  let localAnswerIndex = generateAnswerIndex()
-
-  Promise.all([getQuoteOne(), getQuoteTwo(), getQuoteThree(), getKanyeChat()])
-    .then(() => {
-      console.log("all promises received")
-      buildListOfQuotes(localAnswerIndex)})
-    .then(() => {setGameState('playing')}) 
-}
-
 // ############################# //
-// ##### set gameState ######### //
+// ####### playing game ######## //
 // ############################# //
 
+// fired when user clicks button
 const progressTheGame = (evt) => {
-  Log("~~~ Progressing the game")
-
   if (evt && gameState==='setup') {
-    console.log(`   |   GamesState === setup   |  ${gameState}`)
-    setGameState('loading')
-    loadGame(2)
-    return
-
-  } else if (gameState==='loading') {
-    console.log(`   |   GamesState === loading   |   ${gameState}`)
-    //loadGame will progress gameState after fetch from API's
-    return
-
+    setGameState('loading') // triggers useEffect to fetch APIs
   } else if (gameState==='playing'){
-    console.log(`   |   GamesState === playing   |   ${gameState}`)
     if (guessIndex === answerIndex){
-      console.log("Correct!")
       setGameState('victory')
       setScore(score+1)
     } else {
-      console.log("wrong choice")
       setGameState('defeat')
     }
-
   } else if (gameState==='victory' || gameState==='defeat') {
-    console.log(`   |   GamesState === victory/defeat   |   ${gameState}`)
-    loadGame(99)
     setGameState('loading')
   }
 }
@@ -167,10 +141,14 @@ const updatechoice = (event) => {
   if (gameState==='playing'){
     event.target.classList.toggle('red-border')
     const chosenLetter = event.target.value
+    setGuessIndex(matchLetterToIndex[chosenLetter])
     console.log(`User has chosen ${chosenLetter}`)
-    setGuessIndex(mapAnswerToIndex[chosenLetter])
   }
 }
+
+// ############################# //
+// ######## build HTML ######### //
+// ############################# //
 
 const renderButton = () => {
   if (gameState==='setup'|| gameState===null) {
@@ -185,8 +163,7 @@ const renderButton = () => {
   else if (gameState==='victory' || gameState==='defeat'){
     return (<button onClick={(evt) => progressTheGame(evt)} className="choose bold">Go Again</button>)
   }
-
-  // ### build HTML ### //
+  
 }
   return (
     <div className='container'>
