@@ -48,10 +48,11 @@ function getKanyeChat () {
   .catch("We have a problem accessing Kanye")
   }
 function getQuoteOne () {
-  return fetch('http://ron-swanson-quotes.herokuapp.com/v2/quotes')
+  return fetch('https://api.quotable.io/random')
   .then(res => res.json())
   .then(quote => {
-    const option = reduceString(String(quote), quoteLength)
+    console.log(`quote one = ${quote.content}`)
+    const option = reduceString(String(quote.content), quoteLength)
     return option
     })
     .then(option => {
@@ -72,10 +73,10 @@ function getQuoteTwo() {
     })
   }
 function getQuoteThree() {
-    return fetch('http://ron-swanson-quotes.herokuapp.com/v2/quotes')
+    return fetch('https://api.quotable.io/random')
     .then(res => res.json())
     .then(quote => {
-      const option = reduceString(String(quote), quoteLength)
+      const option = reduceString(String(quote.content), quoteLength)
       return option
       })
       .catch((err) => {
