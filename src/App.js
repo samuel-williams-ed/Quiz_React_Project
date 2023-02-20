@@ -10,7 +10,7 @@ function App() {
 const [gameState, setGameState] = useState('setup') //setup, playing, victory, defeat
 const [answerIndex, setAnswerIndex] = useState(0) //should never be > 3
 const [guessIndex, setGuessIndex] = useState(null) //should never be > 3
-const [score, setScore] = useState(0)
+const [score, setScore] = useState([0, 0]) //player score / total Qs
 
 const [quoteOne, setQuoteOne] = useState(["Answer A"])
 const [quoteTwo, setQuoteTwo] = useState(["Answer B"])
@@ -125,11 +125,16 @@ const progressTheGame = (evt) => {
   if (evt && gameState==='setup') {
     setGameState('loading') // triggers useEffect to fetch APIs
   } else if (gameState==='playing'){
+    let newScore = [...score]
     if (guessIndex === answerIndex){
       setGameState('victory')
-      setScore(score+1)
+      newScore[0] += 1 //increase player score
+      newScore[1] += 1 //increase total
+      setScore(newScore)
     } else {
       setGameState('defeat')
+      newScore[1] += 1
+      setScore(newScore)
     }
   } else if (gameState==='victory' || gameState==='defeat') {
     setGameState('loading')
@@ -171,7 +176,7 @@ const renderButton = () => {
       <h1> Kanye guess which it is yet?</h1>
       <div className="score-container">
           <h3>Score:</h3>
-          <p>{score}</p>
+          <p>{score[0]}/{score[1]}</p>
         </div>
     </div>
     <QuizCard currentOptions={listOfQuotes} updatechoice={updatechoice} gameState={gameState}/>
