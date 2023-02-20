@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import QuizCard from './containers/QuizCard';
 import reduceString from './helpers/reduceString'
-import Log from './helpers/Log'
 
 function App() {
 
@@ -12,10 +11,6 @@ const [answerIndex, setAnswerIndex] = useState(0) //should never be > 3
 const [guessIndex, setGuessIndex] = useState(null) //should never be > 3
 const [score, setScore] = useState([0, 0]) //player score / total Qs
 
-const [quoteOne, setQuoteOne] = useState(["Answer A"])
-const [quoteTwo, setQuoteTwo] = useState(["Answer B"])
-const [quoteThree, setQuoteThree] = useState(["Answer C"])
-const [kanyeQuote, setKanyeQuote] = useState("Answer D")
 const [listOfQuotes, setListOfQuotes] = useState([])
 
 // settings:
@@ -45,14 +40,7 @@ function getKanyeChat () {
   return fetch('https://api.kanye.rest/')
   .then( res => res.json())
   .then( quote => { 
-
-    // debug
-    // console.log("We have retrieved Kanye's wisdom")
-    // console.log(quote.quote)
-    //
-
     const option = reduceString(String(quote.quote), quoteLength)
-    setKanyeQuote(option)
     console.log(`Kanye says "${option}"`)
     return option
   })
@@ -64,8 +52,6 @@ function getQuoteOne () {
   .then(res => res.json())
   .then(quote => {
     const option = reduceString(String(quote), quoteLength)
-    setQuoteOne(option)
-    console.log(`set Option 1 to: ${option}`)
     return option
     })
     .then(option => {
@@ -79,8 +65,6 @@ function getQuoteTwo() {
   .then(res => res.json())
   .then(quote => {
     const option = reduceString(String(quote.quote), quoteLength)
-    setQuoteTwo(option)
-    console.log(`set Option 2 to: ${option}`)
     return option
     })
     .catch((err) => {
@@ -92,8 +76,6 @@ function getQuoteThree() {
     .then(res => res.json())
     .then(quote => {
       const option = reduceString(String(quote), quoteLength)
-      setQuoteThree(option)
-      console.log(`set Option 3 to: ${option}`)
       return option
       })
       .catch((err) => {
@@ -120,30 +102,29 @@ function setAnswerOptions(localAnswerIndex, localListOfQuotes, localKanyeQuote) 
 // ####### playing game ######## //
 // ############################# //
 
-// fired when user clicks button
-const progressTheGame = (evt) => {
+const progressTheGame = (evt) => { // fired when user clicks button
+
   if (evt && gameState==='setup') {
     setGameState('loading') // triggers useEffect to fetch APIs
+
   } else if (gameState==='playing'){
     let newScore = [...score]
     if (guessIndex === answerIndex){
       setGameState('victory')
       newScore[0] += 1 //increase player score
-      newScore[1] += 1 //increase total
-      setScore(newScore)
     } else {
       setGameState('defeat')
-      newScore[1] += 1
-      setScore(newScore)
     }
+    newScore[1] += 1 //increase total Qs
+    setScore(newScore)
+
   } else if (gameState==='victory' || gameState==='defeat') {
     setGameState('loading')
   }
 }
-
 // change guessIndex when user selects a new answer
 const updatechoice = (event) => {
-  if (gameState==='playing'){
+  if (gameState==='playing'){ //stop user button press when not playing
     event.target.classList.toggle('red-border')
     const chosenLetter = event.target.value
     setGuessIndex(matchLetterToIndex[chosenLetter])
