@@ -49,15 +49,19 @@ function getKanyeChat () {
   }
 
 function getRonChat(){
-  return fetch('http://ron-swanson-quotes.herokuapp.com/v2/quotes')
-  .then( res => res.json())
-  .then( quote => {
-    const option = reduceString(String(quote[0]), quoteLength)
-    console.log(`Ron says "${option}"`)
-    return option
-  })
-  .then(option => option)
-  .catch("We have a problem accessing Ron")
+  try {
+    return fetch('https://ron-swanson-quotes.herokuapp.com/v2/quotes')
+    .then( res => res.json())
+    .then( quote => {
+      const option = reduceString(String(quote[0]), quoteLength)
+      console.log(`Ron says "${option}"`)
+      return option
+    })
+    .then(option => option)
+    .catch("We have a problem accessing Ron")
+  } catch {
+    console.log("No Ron quotes :(")
+  }
   }
 
 function getQuoteOne () {
