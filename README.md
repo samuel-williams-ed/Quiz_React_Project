@@ -1,10 +1,10 @@
-# Kanye Quiz
+# Swanson Quiz
 
-See if you cam guess which quote comes from Kayne West?!
+See if you cam guess which quote is by Ron Swanson?!
 
 This project uses the React framework to build a simple quiz site. 
 
-It uses multiple publically available API's to generate a random of choice of quotes each game!
+It uses multiple publically available API's to generate a random of choice of quotes each game.
 
 Hope you enjoy!
 
