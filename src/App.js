@@ -21,11 +21,11 @@ const quoteLength = 145
   useEffect(() => {
     if (gameState == "loading") {
       let localAnswerIndex = generateAnswerIndex() //also saves into useState 'answerIndex'
-      getKanyeChat()
-        .then((localKanyeQuote) => {
+      getRonChat()
+        .then((localRonQuote) => {
           Promise.all([getQuoteOne(), getQuoteTwo(), getQuoteThree()])
             .then((quotes) => {
-              setAnswerOptions(localAnswerIndex, quotes, localKanyeQuote)
+              setAnswerOptions(localAnswerIndex, quotes, localRonQuote)
             })
             .then(() => {setGameState('playing')}) 
         })
@@ -47,6 +47,19 @@ function getKanyeChat () {
   .then(option => option)
   .catch("We have a problem accessing Kanye")
   }
+
+function getRonChat(){
+  return fetch('http://ron-swanson-quotes.herokuapp.com/v2/quotes')
+  .then( res => res.json())
+  .then( quote => {
+    const option = reduceString(String(quote[0]), quoteLength)
+    console.log(`Ron says "${option}"`)
+    return option
+  })
+  .then(option => option)
+  .catch("We have a problem accessing Ron")
+  }
+
 function getQuoteOne () {
   return fetch('https://api.quotable.io/random')
   .then(res => res.json())
@@ -155,7 +168,7 @@ const renderButton = () => {
   return (
     <div className='container'>
     <div className='title-bar'>
-      <h1> Kanye guess which it is yet?</h1>
+      <h1> Pick the correct quote. It's quite simple, son.</h1>
       <div className="score-container">
           <h3>Score:</h3>
           <p>{score[0]}/{score[1]}</p>
