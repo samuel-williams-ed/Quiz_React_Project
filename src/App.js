@@ -168,7 +168,7 @@ const renderButton = () => {
   return (
     <div className='container'>
     <div className='title-bar'>
-      <h1> Kanye guess which it is yet?</h1>
+      <h1> Pick the correct quote. It's quite simple, son.</h1>
       <div className="score-container">
           <h3>Score:</h3>
           <p>{score[0]}/{score[1]}</p>

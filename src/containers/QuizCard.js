@@ -30,7 +30,7 @@ const QuizCard = ({currentOptions, updatechoice, gameState}) => {
     }
     return (
         <>
-        <h3>Guess which quote is from world famous Artist, Rapper, Entrepreneur and Social Commentator - Kanye West.</h3>
+        <h3>Guess which quote is from world renown Metal-worker, Entrepreneur, Libertarian and Director at Pawnee Parks and Recreation Department - Ron Swanson.</h3>
         <section className="image-container">
         </section>
         {buildQuizOption()}
