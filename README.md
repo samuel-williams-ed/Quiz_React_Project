@@ -1,6 +1,6 @@
 # Swanson Quiz
 
-See if you cam guess which quote is by Ron Swanson?!
+See if you can guess which quote is by Ron Swanson?!
 
 This project uses the React framework to build a simple quiz site. 
 
